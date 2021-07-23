@@ -1,0 +1,37 @@
+// C++ code
+//PINs
+const uint8_t motion_pin = 2;
+const uint8_t led_pin = 13;
+
+//Globals
+volatile bool led_state = LOW;
+uint8_t sensorState = 0;
+
+void setup()
+{
+  pinMode(motion_pin, INPUT);
+  pinMode(led_pin, OUTPUT);
+  Serial.begin(9600);
+  attachInterrupt(digitalPinToInterrupt(motion_pin), change, CHANGE);
+
+}
+
+void loop()
+{
+  delay(10); // Delay a little bit to improve simulation performance
+}
+
+void change(){
+  // read the state of the sensor/digital input
+  sensorState = digitalRead(motion_pin);
+  // check if sensor pin is HIGH. if it is, set the
+  // LED on.
+  led_state = !led_state;
+  if (sensorState == HIGH) {
+    digitalWrite(led_pin, HIGH);
+    Serial.println("Interrupt");
+  } else {
+    digitalWrite(led_pin, LOW);
+    Serial.println("Non Interrupt");
+  }
+}
